@@ -1,0 +1,2 @@
+1.0 -> 1.1
+    Switched from a java captcha generation code to the php project securimage (http://www.phpcaptcha.org)
