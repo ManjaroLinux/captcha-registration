@@ -2,8 +2,8 @@
 
 $mod_config = array (
   'mod_name' => 'Captcha Registration',
-  'version' => '1.0',
-  'release_date' => '2011-11-12',
+  'version' => '1.1',
+  'release_date' => '2011-11-22',
   'author' => 'Roland Singer - Manjaro Linux',
   'mod_installer' => 'OK',
   'fluxbb_versions' => 

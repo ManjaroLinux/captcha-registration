@@ -1,2 +1,4 @@
 Main developers:
   Roland Singer <roland@manjarolinux.org>
+
+The captcha code is taken from http://www.phpcaptcha.org
