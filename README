@@ -1,1 +1,106 @@
 This modification adds a simple captcha code to the registration form. Just upload all files in the folder 'files' to you forum's root directory and install this mod with the modinstaller.
+
+
+
+Manual installation:
+
+
+#--- MOD Captcha Registration (captcha_registration)
+Version: 1.1
+Release date: 2011-11-22
+This modification adds a simple captcha code to the registration form
+
+======================[ MANUAL INSTALLATION PROCEDURE ]=======================
+
+Note: There may be several times the opening and saving the same file.
+This is due to changes order that are made by type and not by files.
+Are performed, in order: Insert before, Add after, Replace then Move
+
+#----[ FOLLOW THE FOLLOWING STEPS TO MAKE THE CHANGES TO FILES ]----
+
+#---[ 1 OPEN ]----------------------------------------------------------------
+
+    register.php
+
+#--[ 2 FIND ] Info: $search_file[register][0]---------------------------------
+
+define('PUN_ROOT',
+
+#--[ 3 INSERT BEFORE ] Info: $insert_file[register][0]------------------------
+
+// [modif] - Mod captcha_registration -->
+session_start();
+// [modif] - End Mod captcha_registration -->
+
+
+#--[ 4 FIND ] Info: $search_file[register][1]---------------------------------
+
+// Load the register.php language file
+
+#--[ 5 INSERT BEFORE ] Info: $insert_file[register][1]------------------------
+
+// [modif] - Mod captcha_registration --> - Add language file
+if(file_exists(PUN_ROOT.'lang/'.$pun_user['language'].'/mod_captcha_registration.php'))
+  require PUN_ROOT.'lang/'.$pun_user['language'].'/mod_captcha_registration.php';
+else
+  require PUN_ROOT.'lang/English/mod_captcha_registration.php';
+// [modif] - End Mod captcha_registration -->
+
+
+#--[ 6 FIND ] Info: $search_file[register][2]---------------------------------
+
+// Validate email
+
+#--[ 7 INSERT BEFORE ] Info: $insert_file[register][2]------------------------
+
+//[modif] - Mod captcha_registration --> - Validate confirmation code
+	include_once 'plugins/captcha_registration/securimage/securimage.php';
+
+	$securimage = new Securimage();
+
+	if ($securimage->check($_POST['captcha_securimage_code']) == false) {
+		$errors[] = $lang_mod_captcha_registration['Captcha fail'];
+	}
+// [modif] - End Mod captcha_registration
+
+
+#--[ 8 FIND ] Info: $search_file[register][3]---------------------------------
+
+<p class="buttons"><input type="submit" name="register"
+
+#--[ 9 INSERT BEFORE ] Info: $insert_file[register][3]------------------------
+
+<!-- [modif] - Mod captcha_registration -->
+<div class="inform">
+	<fieldset>
+		<legend><?php	echo $lang_mod_captcha_registration['Captcha title']	?></legend>
+		<div class="infldset">
+			<p><?php echo	sprintf($lang_mod_captcha_registration['Captcha info'], "<a href=\"#\" onclick=\"document.getElementById('captcha_securimage_image').src = 'plugins/captcha_registration/securimage/securimage_show.php?' + Math.random(); return false\">", "</a>");?></p>
+			<label class="required">
+				<table border="0">
+					<tr>
+						<td><img id="captcha_securimage_image" src="plugins/captcha_registration/securimage/securimage_show.php" alt="CAPTCHA Image" /></td>
+					</tr>
+					<tr>
+						<td>
+							<strong><?php echo	$lang_mod_captcha_registration['Captcha question']	?>&nbsp;<span><?php echo $lang_common['Required'] ?></span></strong><br/>
+							<input type="text" name="captcha_securimage_code" maxlength="6" />
+						</td>
+					</tr>
+				</table>
+			</label>
+		</div>
+	</fieldset>
+</div>
+<!-- [modif] - End Mod captcha_registration -->
+
+
+******************************************************************************
+#-------[ 10 SAVE FILE register.php ]
+******************************************************************************
+
+======================[ END OF INSTALLATION PROCEDURE ]=======================
+
+This file was created automatically by the plugin Mod Installer
+Written by Otomatic - fluxbb.fr
+
